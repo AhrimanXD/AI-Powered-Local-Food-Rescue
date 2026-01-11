@@ -48,7 +48,7 @@ By facilitating quick and efficient matches based on location, food type, quanti
 
 ## Tech Stack (Suggested)
 
-- Frontend: React Native (for mobile app) or Flutter
+- Frontend: React
 - Backend: Node.js / Python (FastAPI/Django)
 - Database: PostgreSQL with PostGIS for location-based queries
 - AI Integration: OpenAI API / Grok API / Hugging Face models for generative features

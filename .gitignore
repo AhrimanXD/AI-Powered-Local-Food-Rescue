@@ -1,0 +1,40 @@
+# Python
+# Byte-code files
+*.pyc
+__pycache__/
+*.pyd
+*.pyo
+*.egg-info/
+.eggs/
+
+# Distribution / Packaging
+.Python
+build/
+dist/
+wheels/
+*.egg-info/
+*.whl
+
+# Virtual environment
+venv/
+env/
+__pycache__/
+.env
+# For use with conda environments (uncomment the next line if you use conda)
+# .conda/
+
+# IDEs and editors
+# VS Code
+.vscode/
+# PyCharm
+.idea/
+
+# Miscellaneous
+# Logs and databases
+*.log
+*.sqlite3
+*.db.sqlite3
+
+# OS generated files
+.DS_Store # macOS
+Thumbs.db # Windows
