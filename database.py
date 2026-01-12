@@ -31,25 +31,30 @@ def get_active_offers():
     return offers
 
 def match_offers(criteria):
-    # criteria is a dict from Gemini, e.g., {'food_type': 'vegetarian', 'quantity': 15, 'location': 'Abuja', 'max_expiration': '2026-01-11T20:00:00'}
     conn = sqlite3.connect('offers.db')
     c = conn.cursor()
     now = datetime.now().isoformat()
-    query = "SELECT * FROM offers WHERE active=1 AND expiration > ?"
+    
+    query = "SELECT id, food_type, quantity, expiration, location, email FROM offers WHERE active=1 AND expiration > ?"
     params = [now]
     
-    if 'food_type' in criteria:
-        query += " AND food_type LIKE ?"
-        params.append(f"%{criteria['food_type']}%")
-    if 'quantity' in criteria:
+    if criteria.get('food_type'):
+        # Split into words and require at least one match (better relevance)
+        words = criteria['food_type'].lower().split()
+        conditions = " OR ".join(["LOWER(food_type) LIKE ?" for _ in words])
+        query += f" AND ({conditions})"
+        params.extend([f"%{w}%" for w in words])
+    
+    if criteria.get('quantity'):
         query += " AND quantity >= ?"
         params.append(criteria['quantity'])
-    if 'location' in criteria:
-        query += " AND location LIKE ?"
-        params.append(f"%{criteria['location']}%")
-    if 'max_expiration' in criteria:
-        query += " AND expiration <= ?"
-        params.append(criteria['max_expiration'])
+    
+    if criteria.get('location'):
+        query += " AND LOWER(location) LIKE ?"
+        params.append(f"%{criteria['location'].lower()}%")
+    
+    # Optional: sort by soonest expiring first
+    query += " ORDER BY expiration ASC"
     
     c.execute(query, params)
     matches = c.fetchall()
